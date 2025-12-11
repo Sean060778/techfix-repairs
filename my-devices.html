@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devices - TechFix Repairs</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --tf-primary: #0d6efd;
+            --tf-dark: #212529;
+            --tf-light: #f8f9fa;
+        }
+        .device-card {
+            transition: transform .2s ease, box-shadow .2s ease;
+            border: 1px solid #eef2f7;
+            height: 100%;
+        }
+        .device-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .device-image {
+            height: 200px;
+            object-fit: cover;
+            background: #f8f9fa;
+        }
+        .badge-status {
+            font-size: 0.75rem;
+        }
+        .navbar-brand i {
+            color: var(--tf-primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-gear-wide-connected me-2"></i> TechFix Repairs
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li> 
+                    <li class="nav-item d-none" id="nav-my-bookings"><a class="nav-link" href="my-bookings.html">My Bookings</a></li>
+                    <li class="nav-item d-none" id="nav-my-devices"><a class="nav-link active" href="my-devices.html">My Devices</a></li>
+                    <li class="nav-item d-none" id="nav-profile"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item" id="auth-login"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item" id="auth-register"><a class="nav-link" href="register.html">Register</a></li>
+                    <li class="nav-item d-none" id="auth-logout"><a class="nav-link" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">My Devices</h2>
+                <p class="text-muted mb-0">View and manage your registered devices</p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="device-filter-form" class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="search-input" placeholder="Search make, model, serial number...">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="device-type-filter">
+                            <option value="">All Device Types</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="desktop">Desktop</option>
+                            <option value="tablet">Tablet</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="os-filter">
+                            <option value="">All Operating Systems</option>
+                            <option value="windows">Windows</option>
+                            <option value="macos">macOS</option>
+                            <option value="linux">Linux</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search me-1"></i> Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Devices Grid -->
+        <div id="devices-container" class="row g-4">
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="text-center py-5 d-none">
+            <i class="bi bi-laptop" style="font-size: 4rem; color: #ccc;"></i>
+            <h4 class="mt-3">No devices found</h4>
+            <p class="text-muted">Try adjusting your filters</p>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p>&copy; 2025 TechFix Repairs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        $(document).ready(function() {
+            loadDevices();
+
+            $('#device-filter-form').on('submit', function(e) {
+                e.preventDefault();
+                loadDevices();
+            });
+        });
+
+        function loadDevices() {
+            const search = $('#search-input').val();
+            const deviceType = $('#device-type-filter').val();
+            const os = $('#os-filter').val();
+
+            // Use my-devices endpoint to get customer's own devices
+            let url = `${API_URL}/my-devices`;
+            const params = [];
+            if (search) params.push(`search=${encodeURIComponent(search)}`);
+            if (deviceType) params.push(`device_type=${deviceType}`);
+            if (os) params.push(`operating_system=${os}`);
+            if (params.length) url += `?${params.join('&')}`;
+
+            $('#devices-container').html(`
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `);
+            $('#empty-state').addClass('d-none');
+
+            axios.get(url)
+                .then(response => {
+                    // Handle response structure - my-devices returns {devices: [...]}
+                    const devices = response.data.devices || response.data || [];
+                    const container = $('#devices-container');
+                    container.empty();
+
+                    if (devices.length === 0) {
+                        $('#empty-state').removeClass('d-none');
+                        return;
+                    }
+
+                    devices.forEach(device => {
+                        const statusColor = getStatusColor(device.status);
+                        const statusLabel = device.status.replace(/_/g, ' ').toUpperCase();
+                        const deviceImage = device.image_url || DEFAULT_DEVICE_IMAGE;
+                        const osIcon = getOSIcon(device.operating_system);
+                        const deviceTypeIcon = getDeviceTypeIcon(device.device_type);
+
+                        container.append(`
+                            <div class="col-md-4 col-lg-3">
+                                <div class="card device-card h-100">
+                                    <img src="${deviceImage}" class="card-img-top device-image" alt="${device.make} ${device.model}" onerror="this.src='${DEFAULT_DEVICE_IMAGE}'">
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="mb-2">
+                                            <span class="badge bg-${statusColor} badge-status">${statusLabel}</span>
+                                        </div>
+                                        <h5 class="card-title">${device.make} ${device.model}</h5>
+                                        <p class="card-text text-muted small mb-2">
+                                            <i class="bi ${deviceTypeIcon} me-1"></i>${device.device_type.charAt(0).toUpperCase() + device.device_type.slice(1)}<br>
+                                            <i class="bi ${osIcon} me-1"></i>${device.operating_system.charAt(0).toUpperCase() + device.operating_system.slice(1)}
+                                        </p>
+                                        <p class="card-text small"><strong>Serial:</strong> ${device.serial_number}</p>
+                                        ${device.description_of_issue ? `<p class="card-text small text-muted">${device.description_of_issue}</p>` : ''}
+                                        <div class="mt-auto pt-2">
+                                            <button class="btn btn-sm btn-primary w-100" onclick="viewDevice(${device.device_id})">
+                                                <i class="bi bi-eye me-1"></i>View Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                })
+                .catch(error => {
+                    $('#devices-container').html(`
+                        <div class="col-12">
+                            <div class="alert alert-danger">Failed to load devices. Please try again.</div>
+                        </div>
+                    `);
+                });
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'available': return 'success';
+                case 'in_service': return 'primary';
+                case 'maintenance': return 'warning';
+                default: return 'secondary';
+            }
+        }
+
+        function getOSIcon(os) {
+            switch(os) {
+                case 'windows': return 'bi-windows';
+                case 'macos': return 'bi-apple';
+                case 'linux': return 'bi-ubuntu';
+                default: return 'bi-laptop';
+            }
+        }
+
+        function getDeviceTypeIcon(type) {
+            switch(type) {
+                case 'laptop': return 'bi-laptop';
+                case 'desktop': return 'bi-pc-display';
+                case 'tablet': return 'bi-tablet';
+                default: return 'bi-device-ssd';
+            }
+        }
+
+        function viewDevice(deviceId) {
+            // Fetch and show device details in a modal
+            axios.get(`${API_URL}/devices/${deviceId}`)
+                .then(response => {
+                    const device = response.data;
+                    const deviceImage = device.image_url || DEFAULT_DEVICE_IMAGE;
+                    const statusColor = getStatusColor(device.status);
+                    const statusLabel = device.status.replace(/_/g, ' ').toUpperCase();
+                    
+                    const detailsHtml = `
+                        <div class="row">
+                            <div class="col-md-5 text-center mb-3">
+                                <img src="${deviceImage}" class="img-fluid rounded" alt="${device.make} ${device.model}" style="max-height: 300px; object-fit: cover;" onerror="this.src='${DEFAULT_DEVICE_IMAGE}'">
+                            </div>
+                            <div class="col-md-7">
+                                <h4 class="mb-3">${device.make} ${device.model}</h4>
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th width="40%">Serial Number:</th>
+                                        <td>${device.serial_number || 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Device Type:</th>
+                                        <td>${device.device_type ? device.device_type.charAt(0).toUpperCase() + device.device_type.slice(1) : 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Operating System:</th>
+                                        <td>${device.operating_system ? device.operating_system.charAt(0).toUpperCase() + device.operating_system.slice(1) : 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status:</th>
+                                        <td><span class="badge bg-${statusColor}">${statusLabel}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description of Issue:</th>
+                                        <td>${device.description_of_issue || 'No description provided'}</td>
+                                    </tr>
+                                    ${device.created_at ? `
+                                    <tr>
+                                        <th>Registered:</th>
+                                        <td>${new Date(device.created_at).toLocaleDateString()}</td>
+                                    </tr>
+                                    ` : ''}
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    
+                    Swal.fire({
+                        title: 'Device Details',
+                        html: detailsHtml,
+                        width: '800px',
+                        showCloseButton: true,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Close',
+                        customClass: {
+                            popup: 'text-start'
+                        }
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.response?.data?.message || 'Failed to load device details'
+                    });
+                });
+        }
+    </script>
+</body>
+</html>
+

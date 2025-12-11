@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Repair | TechFix Repairs</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --tf-primary: #0d6efd;
+            --tf-dark: #212529;
+            --tf-light: #f8f9fa;
+        }
+        body {
+            background-color: var(--tf-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar-brand i {
+            color: var(--tf-primary);
+        }
+        .booking-container {
+            flex-grow: 1;
+            padding: 3rem 0;
+        }
+        .booking-card {
+            border: none;
+            border-top: 5px solid var(--tf-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: bold;
+        }
+        .step.active .step-circle {
+            background: var(--tf-primary);
+            color: white;
+        }
+        .step.completed .step-circle {
+            background: #28a745;
+            color: white;
+        }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="bi bi-gear-wide-connected me-2"></i> TechFix Repairs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item d-none" id="nav-my-bookings"><a class="nav-link active" href="my-bookings.html">My Bookings</a></li>
+                    <li class="nav-item d-none" id="nav-my-devices"><a class="nav-link" href="my-devices.html">My Devices</a></li>
+                    <li class="nav-item d-none" id="nav-profile"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item" id="auth-login"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item" id="auth-register"><a class="nav-link" href="register.html">Register</a></li>
+                    <li class="nav-item d-none" id="auth-logout"><a class="nav-link" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="booking-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card booking-card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0"><i class="bi bi-calendar-plus me-2"></i>Book Your Repair</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <!-- Step Indicator -->
+                            <div class="step-indicator">
+                                <div class="step active" id="step-1-indicator">
+                                    <div class="step-circle">1</div>
+                                    <small>Device Info</small>
+                                </div>
+                                <div class="step" id="step-2-indicator">
+                                    <div class="step-circle">2</div>
+                                    <small>Schedule</small>
+                                </div>
+                                <div class="step" id="step-3-indicator">
+                                    <div class="step-circle">3</div>
+                                    <small>Confirm</small>
+                                </div>
+                            </div>
+
+                            <form id="booking-form" novalidate>
+                                <!-- Step 1: Device Information -->
+                                <div class="form-section active" id="step-1">
+                                    <h5 class="mb-4">Device Information</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Device Make <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="device-make" required placeholder="e.g., Dell, Apple, Lenovo">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Device Model <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="device-model" required placeholder="e.g., MacBook Pro, XPS 13">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Serial Number / Asset Tag</label>
+                                            <input type="text" class="form-control" id="serial-number" placeholder="Optional">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Device Type <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="device-type" required>
+                                                <option value="">Select Type</option>
+                                                <option value="laptop">Laptop</option>
+                                                <option value="desktop">Desktop</option>
+                                                <option value="tablet">Tablet</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Operating System</label>
+                                            <select class="form-select" id="operating-system">
+                                                <option value="">Select OS</option>
+                                                <option value="windows">Windows</option>
+                                                <option value="macos">macOS</option>
+                                                <option value="linux">Linux</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Service Type <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="service-type" required>
+                                                <option value="">Select Service</option>
+                                                <optgroup label="Hardware Services">
+                                                    <option value="screen_replacement">Screen Replacement - ₱10,000+</option>
+                                                    <option value="battery_replacement">Battery Replacement - ₱800+</option>
+                                                    <option value="keyboard_repair">Keyboard Repair - ₱600+</option>
+                                                    <option value="hardware_repair">Hardware Repair - ₱1,500+</option>
+                                                </optgroup>
+                                                <optgroup label="Thermal Services">
+                                                    <option value="thermal_cleaning">Thermal & Cleaning - ₱700+</option>
+                                                    <option value="fan_replacement">Fan Replacement - ₱900+</option>
+                                                </optgroup>
+                                                <optgroup label="Software Services">
+                                                    <option value="os_optimization">OS & Optimization - ₱600+</option>
+                                                    <option value="virus_removal">Virus Removal - ₱800+</option>
+                                                    <option value="driver_updates">Driver Updates - ₱500+</option>
+                                                </optgroup>
+                                                <optgroup label="Data Services">
+                                                    <option value="data_recovery">Data Recovery - ₱1,500+</option>
+                                                </optgroup>
+                                                <optgroup label="Upgrades">
+                                                    <option value="ram_upgrade">RAM Upgrade - ₱1,200+</option>
+                                                    <option value="ssd_upgrade">SSD Upgrade - ₱1,000+</option>
+                                                </optgroup>
+                                                <optgroup label="Diagnostics">
+                                                    <option value="full_diagnostic">Full Diagnostic - ₱300</option>
+                                                </optgroup>
+                                            </select>
+                                            <small class="text-muted">Select the type of repair service you need</small>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Description of Issue <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="issue-description" rows="4" required placeholder="Please describe the problem in detail. e.g., Screen is cracked, laptop won't turn on, overheating issues, etc."></textarea>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Device Image</label>
+                                            <input type="file" class="form-control" id="device-image" accept="image/*">
+                                            <small class="text-muted">Upload a photo of your device (optional, max 2MB)</small>
+                                            <div id="image-preview" class="mt-2" style="display: none;">
+                                                <img id="preview-img" src="" alt="Device preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-primary" id="step1-next-btn">Next <i class="bi bi-arrow-right ms-1"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- Step 2: Schedule -->
+                                <div class="form-section" id="step-2">
+                                    <h5 class="mb-4">Schedule Your Appointment</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Preferred Drop-off Date <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" id="dropoff-date" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Preferred Time Slot <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="time-slot" required>
+                                                <option value="">Select Time</option>
+                                                <optgroup label="Morning (AM)">
+                                                    <option value="08:00">8:00 AM</option>
+                                                    <option value="09:00">9:00 AM</option>
+                                                    <option value="10:00">10:00 AM</option>
+                                                    <option value="11:00">11:00 AM</option>
+                                                    <option value="12:00">12:00 PM (Noon)</option>
+                                                </optgroup>
+                                                <optgroup label="Afternoon (PM)">
+                                                    <option value="13:00">1:00 PM</option>
+                                                    <option value="14:00">2:00 PM</option>
+                                                    <option value="15:00">3:00 PM</option>
+                                                    <option value="16:00">4:00 PM</option>
+                                                    <option value="17:00">5:00 PM</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Preferred Staff Member <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="staff-select" required>
+                                                <option value="">Select Staff</option>
+                                            </select>
+                                            <small class="text-muted">Please select a technician to handle your repair</small>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="alert alert-info">
+                                                <i class="bi bi-info-circle me-2"></i>
+                                                <strong>Note:</strong> A diagnostic fee of ₱100 will be charged upon drop-off. Final repair cost will be determined after inspection.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary" id="step2-back-btn"><i class="bi bi-arrow-left me-1"></i> Back</button>
+                                        <button type="button" class="btn btn-primary" id="step2-next-btn">Next <i class="bi bi-arrow-right ms-1"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- Step 3: Confirmation -->
+                                <div class="form-section" id="step-3">
+                                    <h5 class="mb-4">Review & Confirm</h5>
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Device Details</h6>
+                                            <p class="mb-1"><strong>Make:</strong> <span id="review-make"></span></p>
+                                            <p class="mb-1"><strong>Model:</strong> <span id="review-model"></span></p>
+                                            <p class="mb-1"><strong>Type:</strong> <span id="review-type"></span></p>
+                                            <p class="mb-1"><strong>OS:</strong> <span id="review-os"></span></p>
+                                            <p class="mb-1"><strong>Service:</strong> <span id="review-service"></span></p>
+                                            <p class="mb-0"><strong>Issue:</strong> <span id="review-issue"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Appointment Details</h6>
+                                            <p class="mb-1"><strong>Date:</strong> <span id="review-date"></span></p>
+                                            <p class="mb-1"><strong>Time:</strong> <span id="review-time"></span></p>
+                                            <p class="mb-0"><strong>Assigned Staff:</strong> <span id="review-staff">Not selected</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        Please review all information before submitting. You can cancel this booking later from "My Bookings".
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary" id="step3-back-btn"><i class="bi bi-arrow-left me-1"></i> Back</button>
+                                        <button type="submit" class="btn btn-success" id="confirm-booking-btn"><i class="bi bi-check-circle me-1"></i> Confirm Booking</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 TechFix Repairs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Wait for jQuery to be available
+        (function() {
+            // API_URL is loaded from config.js; fall back locally without TDZ issues
+            const API_URL = (typeof window !== 'undefined' && window.API_URL)
+                ? window.API_URL
+                : 'http://127.0.0.1:8000/api';
+            let currentStep = 1;
+
+            // Make functions globally accessible
+            window.nextStep = function(step) {
+                try {
+                    console.log('nextStep called, step:', step, 'currentStep:', currentStep);
+                    
+                    // Validate current step before proceeding
+                    if (currentStep === 1) {
+                        const make = ($('#device-make').val() || '').trim();
+                        const model = ($('#device-model').val() || '').trim();
+                        const deviceType = $('#device-type').val();
+                        const serviceType = $('#service-type').val();
+                        const issue = ($('#issue-description').val() || '').trim();
+                        
+                        console.log('Field values:', { make, model, deviceType, serviceType, issue });
+                    
+                        // Check which fields are missing
+                        const missingFields = [];
+                        if (!make) missingFields.push('Device Make');
+                        if (!model) missingFields.push('Device Model');
+                        if (!deviceType) missingFields.push('Device Type');
+                        if (!serviceType) missingFields.push('Service Type');
+                        if (!issue) missingFields.push('Description of Issue');
+                        
+                        if (missingFields.length > 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Missing Information',
+                                html: 'Please fill in the following required fields:<br><strong>' + missingFields.join(', ') + '</strong>',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        }
+                    } else if (currentStep === 2) {
+                        const date = $('#dropoff-date').val();
+                        const timeSlot = $('#time-slot').val();
+                        const staffId = $('#staff-select').val();
+                        
+                        // Validate date not in the past
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        const selectedDate = date ? new Date(date) : null;
+
+                        if (!date || !timeSlot || !staffId || (selectedDate && selectedDate < today)) {
+                            const missingFields = [];
+                            if (!date) missingFields.push('Drop-off Date');
+                            if (!timeSlot) missingFields.push('Time Slot');
+                            if (!staffId) missingFields.push('Staff Member');
+                            if (selectedDate && selectedDate < today) missingFields.push('Valid Drop-off Date (no past dates)');
+                            
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Missing Information',
+                                html: 'Please fill in the following required fields:<br><strong>' + missingFields.join(', ') + '</strong>',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        }
+                        // Update review section
+                        window.updateReview();
+                    }
+
+                    // Hide current step
+                    $(`#step-${currentStep}`).removeClass('active');
+                    $(`#step-${currentStep}-indicator`).removeClass('active').addClass('completed');
+
+                    // Show next step
+                    currentStep = step;
+                    $(`#step-${currentStep}`).addClass('active');
+                    $(`#step-${currentStep}-indicator`).addClass('active');
+                    
+                    console.log('Step changed to:', currentStep);
+                } catch (error) {
+                    console.error('Error in nextStep:', error);
+                    alert('An error occurred: ' + error.message);
+                }
+            };
+
+        window.prevStep = function(step) {
+            // Hide current step
+            $(`#step-${currentStep}`).removeClass('active');
+            $(`#step-${currentStep}-indicator`).removeClass('active');
+
+            // Show previous step
+            currentStep = step;
+            $(`#step-${currentStep}`).addClass('active');
+            $(`#step-${currentStep}-indicator`).removeClass('completed').addClass('active');
+        };
+
+        window.updateReview = function() {
+            $('#review-make').text($('#device-make').val());
+            $('#review-model').text($('#device-model').val());
+            $('#review-type').text($('#device-type').val().charAt(0).toUpperCase() + $('#device-type').val().slice(1));
+            $('#review-os').text($('#operating-system').val() || 'Not specified');
+            
+            // Format service type for display
+            const serviceType = $('#service-type').val();
+            const serviceOption = $('#service-type option:selected');
+            const serviceText = serviceOption.text() || 'Not specified';
+            $('#review-service').text(serviceText);
+            
+            $('#review-issue').text($('#issue-description').val());
+            
+            const date = new Date($('#dropoff-date').val());
+            $('#review-date').text(date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+            
+            const timeSlot = $('#time-slot option:selected').text();
+            $('#review-time').text(timeSlot);
+            
+            // Update staff review
+            const staffSelect = $('#staff-select');
+            const selectedStaff = staffSelect.find('option:selected').text();
+            $('#review-staff').text(selectedStaff || 'Not selected');
+        }
+
+        // Load staff list
+        function loadStaff() {
+            axios.get(`${API_URL}/staff`)
+                .then(response => {
+                    const staff = response.data.staff || [];
+                    const staffSelect = $('#staff-select');
+                    staffSelect.empty();
+                    staffSelect.append('<option value="">Select Staff</option>');
+                    
+                    staff.forEach(member => {
+                        const option = $('<option></option>')
+                            .attr('value', member.user_id)
+                            .text(member.full_name + (member.phone_number ? ` - ${member.phone_number}` : ''));
+                        staffSelect.append(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading staff:', error);
+                });
+        }
+
+        // Handle image preview
+        $('#device-image').on('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File Too Large',
+                        text: 'Image must be less than 2MB'
+                    });
+                    $(this).val('');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#preview-img').attr('src', e.target.result);
+                    $('#image-preview').show();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $('#image-preview').hide();
+            }
+        });
+
+        // Check authentication and setup event listeners on page load
+        $(document).ready(function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+            
+            if (!user || !token) {
+                // Store the current URL to redirect back after login
+                sessionStorage.setItem('redirect_after_login', 'book.html');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Set min date to today (no past dates allowed)
+            const today = new Date();
+            const minDate = today.toISOString().split('T')[0];
+            $('#dropoff-date').attr('min', minDate);
+
+            // Load staff list
+            loadStaff();
+
+            // Update auth UI
+            checkAuth();
+
+            // Attach step navigation handlers with validation gates
+            const step1Btn = document.getElementById('step1-next-btn');
+            const step2NextBtn = document.getElementById('step2-next-btn');
+            const step2BackBtn = document.getElementById('step2-back-btn');
+            const step3BackBtn = document.getElementById('step3-back-btn');
+
+            if (step1Btn) {
+                step1Btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.nextStep(2); // validates required fields on step 1
+                });
+            }
+
+            if (step2NextBtn) {
+                step2NextBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.nextStep(3); // validates schedule + staff on step 2
+                });
+            }
+
+            if (step2BackBtn) {
+                step2BackBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.prevStep(1);
+                });
+            }
+
+            if (step3BackBtn) {
+                step3BackBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.prevStep(2);
+                });
+            }
+        });
+
+        // Handle form submission
+        let isSubmitting = false;
+        $('#booking-form').on('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent event from bubbling to other handlers
+            
+            // Prevent double submission
+            if (isSubmitting) {
+                console.log('Form submission already in progress');
+                return;
+            }
+            
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Clean up empty strings to null for optional fields
+            const serialNumber = $('#serial-number').val()?.trim();
+            const operatingSystem = $('#operating-system').val()?.trim();
+            const staffId = $('#staff-select').val();
+            
+            // Validate required fields
+            if (!staffId || staffId.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Staff Required',
+                    text: 'Please select a staff member to handle your repair booking.',
+                    confirmButtonText: 'OK'
+                });
+                isSubmitting = false;
+                $('#confirm-booking-btn').prop('disabled', false).html('<i class="bi bi-check-circle me-1"></i> Confirm Booking');
+                return;
+            }
+            
+            // Use FormData to handle file upload
+            const formData = new FormData();
+            formData.append('user_id', user.user_id);
+            formData.append('make', $('#device-make').val().trim());
+            formData.append('model', $('#device-model').val().trim());
+            if (serialNumber && serialNumber.length > 0) {
+                formData.append('serial_number', serialNumber);
+            }
+            formData.append('description_of_issue', $('#issue-description').val().trim());
+            formData.append('device_type', $('#device-type').val());
+            if (operatingSystem && operatingSystem.length > 0) {
+                formData.append('operating_system', operatingSystem);
+            }
+            formData.append('service_type', $('#service-type').val());
+            formData.append('date', $('#dropoff-date').val());
+            formData.append('time_slot', $('#time-slot').val());
+            formData.append('staff_id', staffId);
+            
+            // Add device image if selected
+            const deviceImage = $('#device-image')[0].files[0];
+            if (deviceImage) {
+                formData.append('device_image', deviceImage);
+            }
+
+            // Disable submit button and set flag
+            isSubmitting = true;
+            $('#confirm-booking-btn').prop('disabled', true).text('Submitting...');
+
+            // Submit booking with FormData
+            axios.post(`${API_URL}/bookings`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(response => {
+                    isSubmitting = false;
+                    $('#confirm-booking-btn').prop('disabled', false).html('<i class="bi bi-check-circle me-1"></i> Confirm Booking');
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Booking Confirmed!',
+                        text: 'Your repair booking has been created successfully.',
+                        confirmButtonText: 'View My Bookings'
+                    }).then(() => {
+                        window.location.href = 'my-bookings.html';
+                    });
+                })
+                .catch(error => {
+                    isSubmitting = false;
+                    $('#confirm-booking-btn').prop('disabled', false).html('<i class="bi bi-check-circle me-1"></i> Confirm Booking');
+                    
+                    console.error('Booking error:', error);
+                    console.error('Error response:', error.response?.data);
+                    let errorMessage = 'An error occurred. Please try again.';
+                    
+                    if (error.response) {
+                        // Handle validation errors - prioritize detailed errors over generic message
+                        if (error.response.status === 422) {
+                            if (error.response.data.errors) {
+                                const errors = error.response.data.errors;
+                                const errorList = Object.keys(errors).map(key => {
+                                    return `${key}: ${errors[key].join(', ')}`;
+                                }).join('\n');
+                                errorMessage = 'Validation errors:\n' + errorList;
+                            } else if (error.response.data.message) {
+                                errorMessage = error.response.data.message;
+                            } else {
+                                errorMessage = 'Please check all required fields are filled correctly.';
+                            }
+                        } else if (error.response.data.message) {
+                            errorMessage = error.response.data.message;
+                        }
+                    } else if (error.message) {
+                        errorMessage = error.message;
+                    }
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Booking Failed',
+                        text: errorMessage
+                    });
+                });
+        });
+        })(); // End IIFE
+    </script>
+</body>
+</html>
+

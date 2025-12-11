@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#f8f9fa"/>
+  <g transform="translate(200, 150)">
+    <!-- Laptop Icon -->
+    <rect x="-60" y="-30" width="120" height="80" rx="5" fill="#dee2e6" stroke="#adb5bd" stroke-width="2"/>
+    <rect x="-55" y="-25" width="110" height="70" rx="3" fill="#ffffff"/>
+    <rect x="-50" y="-20" width="100" height="60" fill="#0d6efd" opacity="0.1"/>
+    <line x1="-50" y1="-10" x2="50" y2="-10" stroke="#adb5bd" stroke-width="1"/>
+    <rect x="-20" y="50" width="40" height="5" rx="2" fill="#adb5bd"/>
+    <!-- Text -->
+    <text x="0" y="100" font-family="Arial" font-size="16" fill="#6c757d" text-anchor="middle">No Device Image Available</text>
+  </g>
+</svg>
+

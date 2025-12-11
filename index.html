@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFix Repairs | Book Your Laptop Repair</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* CSS for Carousel Controls */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: invert(1);
+        }
+
+        /* General Layout */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Primary Color Definition */
+        :root {
+            --tf-primary: #007bff; /* Bootstrap Blue */
+            --tf-dark: #212529;
+            --tf-light-gray: #f8f9fa;
+        }
+
+        /* Hero Section Styling (Tech theme) */
+        .hero-section {
+            background-color: var(--tf-dark); 
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/repair-bg.jpg'); 
+            background-size: cover;
+            background-position: center;
+            height: 60vh; 
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Styling for the How It Works section */
+        .how-it-works .p-4, .service-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            height: 100%; 
+            border: 1px solid var(--tf-light-gray) !important;
+        }
+        .how-it-works .p-4:hover, .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15)!important;
+        }
+
+        .how-it-works .icon-large {
+            font-size: 3rem;
+            color: var(--tf-primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* New Service Card Styling */
+        .service-card .card-icon {
+            font-size: 2rem;
+            color: var(--tf-primary);
+            margin-right: 0.5rem;
+        }
+
+        /* Ensure content pushes footer down */
+        footer {
+            margin-top: auto;
+            background-color: var(--tf-dark) !important;
+        }
+                .navbar-brand i {
+            color: var(--tf-primary); /* Highlight icon in navbar */
+        }
+                .hero-services {
+            background: radial-gradient(circle at 10% 20%, rgba(13,110,253,0.18), transparent 25%),
+                        radial-gradient(circle at 90% 10%, rgba(13,110,253,0.18), transparent 30%),
+                        linear-gradient(135deg, #0d6efd 0%, #1b263b 40%, #0f172a 100%);
+            color: #fff;
+            padding: 4rem 0;
+        }
+        .hero-services h1 { font-weight: 700; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-gear-wide-connected me-2"></i> TechFix Repairs
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li> 
+                    <li class="nav-item d-none" id="nav-my-bookings"><a class="nav-link" href="my-bookings.html">My Bookings</a></li>
+                    <li class="nav-item d-none" id="nav-my-devices"><a class="nav-link" href="my-devices.html">My Devices</a></li>
+                    <li class="nav-item d-none" id="nav-profile"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item" id="auth-login"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item" id="auth-register"><a class="nav-link" href="register.html">Register</a></li>
+                    <li class="nav-item d-none" id="auth-logout"><a class="nav-link" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-services">
+        <div class="container">
+            <h1 class="display-4">Expert Device Repairs. Quick Booking.</h1>
+            <p class="lead">Fast, reliable laptop and desktop repairs. Book your guaranteed repair slot today.</p>
+            <a href="services.html" class="btn btn-primary btn-lg mt-3 shadow-lg">
+                <i class="bi bi-calendar-plus me-2"></i> Book a Repair Slot
+            </a> 
+        </div>
+    </header>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-2">Popular Repair Services</h2>
+        <p class="text-center text-muted mb-4">Pick a service to start your booking.</p>
+        
+        <div class="row">
+            
+            <div class="col-md-4 mb-4">
+                <div class="card service-card h-100 shadow-sm border-0" onclick="window.location.href='services.html?service=hardware'">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary"><i class="bi bi-cpu card-icon"></i>Hardware Repair</h4>
+                        <p class="text-muted small">Screens &bull; Keyboards &bull; Batteries</p>
+                        <p class="card-text">Cracked screens, dead batteries, keyboard and trackpad issues, RAM/SSD upgrades.</p>
+                        <hr>
+                        <p class="fw-bold text-success mb-0">Starts ₱500</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card service-card h-100 shadow-sm border-0" onclick="window.location.href='services.html?service=thermal'">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary"><i class="bi bi-thermometer-high card-icon"></i>Thermal & Cleaning</h4>
+                        <p class="text-muted small">Overheating &bull; Fan noise</p>
+                        <p class="card-text">Deep clean, fresh thermal paste, airflow checks, and fan replacements for cooler performance.</p>
+                        <hr>
+                        <p class="fw-bold text-success mb-0">Starts ₱700</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card service-card h-100 shadow-sm border-0" onclick="window.location.href='services.html?service=os'">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary"><i class="bi bi-windows card-icon"></i>OS & Optimization</h4>
+                        <p class="text-muted small">Windows &bull; macOS &bull; Linux</p>
+                        <p class="card-text">OS repair/reinstall, malware cleanup, driver fixes, tune-ups, and data backup guidance.</p>
+                        <hr>
+                        <p class="fw-bold text-success mb-0">Starts ₱600</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+    <div class="container my-5 how-it-works">
+        <h2 class="text-center mb-5">Seamless Repair Process</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="p-4 rounded shadow-sm">
+                    <i class="bi bi-laptop icon-large"></i>
+                    <h3>1. Describe Device & Issue</h3>
+                    <p class="text-muted">Tell us the make, model, and detailed description of the laptop's problem.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4 rounded shadow-sm">
+                    <i class="bi bi-calendar-check icon-large"></i>
+                    <h3>2. Book Your Appointment</h3>
+                    <p class="text-muted">Select an available drop-off date and time slot from our real-time calendar.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4 rounded shadow-sm">
+                    <i class="bi bi-tools icon-large"></i>
+                    <h3>3. Track & Collect</h3>
+                    <p class="text-muted">Drop off your device and monitor the repair progress instantly via your online dashboard.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Book Repair Service</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="booking-form">
+                        <input type="hidden" id="booking-service-id">
+                        <div class="mb-3">
+                            <label for="device-make" class="form-label">Device Make (e.g., Dell, Apple)</label>
+                            <input type="text" class="form-control" id="device-make" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="issue-description" class="form-label">Description of Issue</label>
+                            <textarea class="form-control" id="issue-description" rows="3" required placeholder="e.g., Screen is cracked, won't turn on, overheating."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Preferred Drop-off Date</label>
+                            <input type="date" class="form-control" id="dropoff-date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Preferred Time Slot</label>
+                            <select class="form-control" id="time-slot" required>
+                                <option value="">Select Time Slot</option>
+                                <option value="09:00">9:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="14:00">2:00 PM</option>
+                                <option value="15:00">3:00 PM</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-info" id="initial-fee-calculation">
+                            Service Fee Deposit: ₱<span id="initial-deposit">500.00</span> (Final repair cost determined after inspection)
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Confirm Repair Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deviceDetailsModal" tabindex="-1" aria-hidden="true"> 
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="details-service-name">Service Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img id="details-service-image" src="" class="img-fluid rounded" alt="Service Image">
+                        </div>
+                        <div class="col-md-6">
+                            <h4 id="details-make-model">Repair Service Name</h4> 
+                            <p class="text-muted" id="details-category">Category: Laptop / Desktop / Tablet</p>
+                            <hr>
+                            <p>This service includes:</p>
+                            <ul class="list-unstyled">
+                                <li><strong class="text-primary">Service Code:</strong> <span id="details-service-code">Svc-001</span></li> 
+                                <li><strong class="text-primary">Estimated Repair Time:</strong> <span id="details-duration">2-3 Business Days</span></li> 
+                                <li><strong class="text-primary">Initial Diagnostic Fee:</strong> ₱<span id="details-fee">500</span></li> 
+                                <li><strong class="text-primary">Repair Type:</strong> <span id="details-type">Hardware / Software</span></li>
+                            </ul>
+                            <div class="alert alert-success" id="details-status">Ready to Book</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-target="#bookingModal" data-bs-toggle="modal" data-bs-dismiss="modal">Book This Service</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p>&copy; 2025 TechFix Repairs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

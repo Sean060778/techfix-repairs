@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | TechFix Repairs</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* Primary Color Definition */
+        :root {
+            --tf-primary: #007bff; /* Bootstrap Blue */
+            --tf-dark: #212529;
+            --tf-light-gray: #f8f9fa;
+        }
+
+        /* General Layout & Background */
+        body {
+            background-color: var(--tf-light-gray); /* Light gray background for contrast */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Navbar Styling (Matching index.html) */
+        .navbar-brand i {
+            color: var(--tf-primary); /* Highlight icon in navbar */
+        }
+        
+        /* Centering and Spacing for the Login Card */
+        .login-container {
+            flex-grow: 1; /* Pushes content down if page is taller */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 0;
+        }
+        
+        /* Card Styling */
+        .card {
+            max-width: 420px; /* Slightly wider for better form spacing */
+            width: 100%;
+            border: none;
+            border-top: 5px solid var(--tf-primary); /* Blue accent border */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background-color: var(--tf-primary);
+            border-color: var(--tf-primary);
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            border-color: #0056b3;
+        }
+        
+        /* Password Toggle Button */
+        .input-group .btn-outline-secondary {
+            border-color: #ced4da;
+            color: #6c757d;
+        }
+        
+        /* Footer push */
+        footer {
+            margin-top: auto;
+            background-color: var(--tf-dark) !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                 <i class="bi bi-gear-wide-connected me-2"></i> TechFix Repairs
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container login-container">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <div class="mb-4 text-center">
+                    <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
+                    <h3 class="card-title mt-2 mb-0"> Login</h3>
+                </div>
+                
+                <div id="login-alert" class="alert alert-danger d-none"></div>
+                
+                <form id="login-form">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-envelope me-1"></i>Username
+                        </label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    
+<div class="mb-3">
+    <label for="password" class="form-label">
+        <i class="bi bi-lock me-1"></i> Password
+    </label>
+    
+    <div class="input-group">
+        <input type="password" class="form-control" id="password" required>
+
+        </button>
+    </div>
+</div>
+                    
+                    <div class="d-flex justify-content-end mb-4">
+                        <a href="forgot-password.html" class="text-primary text-decoration-none small">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 fw-bold">Sign In</button>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <p class="mb-0">
+                        New user? <a href="register.html" class="text-primary text-decoration-none fw-bold">Create an Account</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

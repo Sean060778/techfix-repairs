@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - TechFix Repairs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .stat-card {
+            background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform .2s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card.warning { background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); }
+        .stat-card.info { background: linear-gradient(135deg, #0dcaf0 0%, #0aa2c0 100%); }
+        .stat-card.success { background: linear-gradient(135deg, #198754 0%, #146c43 100%); }
+        .stat-card.danger { background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="bi bi-gear-wide-connected me-2"></i>TechFix Staff</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="bookings.html">Manage Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="devices.html">Manage Devices</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="staff-logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2 class="mb-4"><i class="bi bi-speedometer2 me-2"></i>Staff Dashboard</h2>
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="stat-card warning">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Pending Bookings</h6>
+                            <h3 class="mb-0" id="pending-bookings">0</h3>
+                        </div>
+                        <i class="bi bi-clock-history" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card info">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Confirmed</h6>
+                            <h3 class="mb-0" id="confirmed-bookings">0</h3>
+                        </div>
+                        <i class="bi bi-check-circle" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card success">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Completed</h6>
+                            <h3 class="mb-0" id="completed-bookings">0</h3>
+                        </div>
+                        <i class="bi bi-check2-all" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Total Bookings</h6>
+                            <h3 class="mb-0" id="total-bookings">0</h3>
+                        </div>
+                        <i class="bi bi-calendar-check" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="bookings.html?status=pending" class="btn btn-warning w-100 mb-2">
+                            <i class="bi bi-clock-history me-2"></i>View Pending Bookings
+                        </a>
+                        <a href="bookings.html" class="btn btn-primary w-100 mb-2">
+                            <i class="bi bi-calendar-check me-2"></i>Manage All Bookings
+                        </a>
+                        <a href="devices.html" class="btn btn-info w-100">
+                            <i class="bi bi-laptop me-2"></i>Manage Devices
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="recent-bookings">
+                            <div class="text-center py-3">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/staff.js"></script>
+    <script>
+        $(document).ready(function() {
+            loadDashboardStats();
+        });
+
+        function loadDashboardStats() {
+            axios.get(`${API_URL}/bookings`)
+                .then(response => {
+                    const bookings = response.data || [];
+                    
+                    // Calculate stats
+                    const stats = {
+                        pending: bookings.filter(b => b.status === 'pending').length,
+                        confirmed: bookings.filter(b => b.status === 'confirmed').length,
+                        completed: bookings.filter(b => b.status === 'completed').length,
+                        total: bookings.length
+                    };
+                    
+                    // Update stat cards
+                    $('#pending-bookings').text(stats.pending);
+                    $('#confirmed-bookings').text(stats.confirmed);
+                    $('#completed-bookings').text(stats.completed);
+                    $('#total-bookings').text(stats.total);
+                    
+                    // Show recent bookings
+                    const recentBookings = bookings
+                        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                        .slice(0, 5);
+                    
+                    const recentHtml = recentBookings.length > 0 
+                        ? recentBookings.map(booking => {
+                            const device = booking.device || {};
+                            const user = booking.user || {};
+                            const deviceName = device.make && device.model ? `${device.make} ${device.model}` : 'Unknown';
+                            const statusBadge = `<span class="badge bg-${getStatusColor(booking.status)}">${booking.status}</span>`;
+                            return `
+                                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                                    <div>
+                                        <strong>${deviceName}</strong><br>
+                                        <small class="text-muted">${user.full_name || user.username || 'Unknown'} • ${new Date(booking.date).toLocaleDateString()}</small>
+                                    </div>
+                                    ${statusBadge}
+                                </div>
+                            `;
+                        }).join('')
+                        : '<p class="text-muted text-center">No recent bookings</p>';
+                    
+                    $('#recent-bookings').html(recentHtml);
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard stats:', error);
+                });
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'pending': return 'warning';
+                case 'confirmed': return 'info';
+                case 'completed': return 'success';
+                case 'cancelled': return 'danger';
+                default: return 'secondary';
+            }
+        }
+    </script>
+</body>
+</html>
+

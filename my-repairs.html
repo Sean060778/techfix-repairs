@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Repairs - TechFix Repairs</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --tf-primary: #0d6efd;
+            --tf-dark: #212529;
+            --tf-light: #f8f9fa;
+        }
+        .repair-card {
+            transition: transform .2s ease, box-shadow .2s ease;
+            border-left: 4px solid var(--tf-primary);
+        }
+        .repair-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .repair-card.pending { border-left-color: #ffc107; }
+        .repair-card.confirmed { border-left-color: #0dcaf0; }
+        .repair-card.completed { border-left-color: #198754; }
+        .repair-card.cancelled { border-left-color: #dc3545; }
+        .navbar-brand i {
+            color: var(--tf-primary);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, var(--tf-primary) 0%, #0056b3 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-gear-wide-connected me-2"></i> TechFix Repairs
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="devices.html">Devices</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="my-repairs.html">My Repairs</a></li>
+                    <li class="nav-item d-none" id="nav-profile"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item" id="auth-login"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item" id="auth-register"><a class="nav-link" href="register.html">Register</a></li>
+                    <li class="nav-item d-none" id="auth-logout"><a class="nav-link" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2 class="mb-4">My Repairs</h2>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4" id="stats-container">
+            <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Total Repairs</h6>
+                            <h3 class="mb-0" id="stat-total">0</h3>
+                        </div>
+                        <i class="bi bi-tools" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Pending</h6>
+                            <h3 class="mb-0" id="stat-pending">0</h3>
+                        </div>
+                        <i class="bi bi-clock-history" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #0dcaf0 0%, #0aa2c0 100%);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Confirmed</h6>
+                            <h3 class="mb-0" id="stat-confirmed">0</h3>
+                        </div>
+                        <i class="bi bi-check-circle" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card" style="background: linear-gradient(135deg, #198754 0%, #146c43 100%);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 opacity-75">Completed</h6>
+                            <h3 class="mb-0" id="stat-completed">0</h3>
+                        </div>
+                        <i class="bi bi-check2-all" style="font-size: 2rem; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="repairs-filter-form" class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="search-input" placeholder="Search device make, model...">
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="status-filter">
+                            <option value="">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search me-1"></i> Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Repairs List -->
+        <div id="repairs-container">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="text-center py-5 d-none">
+            <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+            <h4 class="mt-3">No repairs found</h4>
+            <p class="text-muted">You haven't booked any repairs yet</p>
+            <a href="book.html" class="btn btn-primary mt-3">
+                <i class="bi bi-calendar-plus me-2"></i>Book a Repair
+            </a>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p>&copy; 2025 TechFix Repairs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        $(document).ready(function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            loadMyRepairs();
+
+            $('#repairs-filter-form').on('submit', function(e) {
+                e.preventDefault();
+                loadMyRepairs();
+            });
+        });
+
+        function loadMyRepairs() {
+            const status = $('#status-filter').val();
+            let url = `${API_URL}/my-repairs`;
+            if (status) url += `?status=${status}`;
+
+            $('#repairs-container').html(`
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `);
+            $('#empty-state').addClass('d-none');
+
+            axios.get(url)
+                .then(response => {
+                    const data = response.data;
+                    const repairs = data.repairs || [];
+                    const container = $('#repairs-container');
+                    container.empty();
+
+                    // Update statistics
+                    $('#stat-total').text(data.total || 0);
+                    $('#stat-pending').text(data.pending || 0);
+                    $('#stat-confirmed').text(data.confirmed || 0);
+                    $('#stat-completed').text(data.completed || 0);
+
+                    if (repairs.length === 0) {
+                        $('#empty-state').removeClass('d-none');
+                        return;
+                    }
+
+                    // Sort repairs: pending first, then by date
+                    repairs.sort((a, b) => {
+                        const statusOrder = { 'pending': 1, 'confirmed': 2, 'completed': 3, 'cancelled': 4 };
+                        if (statusOrder[a.status] !== statusOrder[b.status]) {
+                            return statusOrder[a.status] - statusOrder[b.status];
+                        }
+                        return new Date(b.date) - new Date(a.date);
+                    });
+
+                    repairs.forEach(repair => {
+                        const device = repair.device || {};
+                        const deviceName = device.make && device.model ? `${device.make} ${device.model}` : 'Unknown Device';
+                        const statusColor = getStatusColor(repair.status);
+                        const statusLabel = repair.status.charAt(0).toUpperCase() + repair.status.slice(1);
+                        const repairDate = new Date(repair.date).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        });
+                        const isUpcoming = repair.is_upcoming || false;
+                        const isPast = repair.is_past || false;
+
+                        let actionBtn = '';
+                        if (repair.status === 'pending') {
+                            actionBtn = `
+                                <button class="btn btn-sm btn-danger" onclick="cancelRepair(${repair.booking_id})">
+                                    <i class="bi bi-x-circle me-1"></i>Cancel
+                                </button>
+                            `;
+                        }
+
+                        container.append(`
+                            <div class="card repair-card ${repair.status} mb-3">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-start">
+                                                ${device.image_url ? `
+                                                    <img src="${device.image_url}" class="rounded me-3" style="width: 80px; height: 80px; object-fit: cover;" alt="${deviceName}" onerror="this.style.display='none'">
+                                                ` : ''}
+                                                <div>
+                                                    <h5 class="card-title mb-1">${deviceName}</h5>
+                                                    ${device.serial_number ? `<p class="text-muted small mb-1"><strong>Serial:</strong> ${device.serial_number}</p>` : ''}
+                                                    ${device.description_of_issue ? `<p class="text-muted small mb-2">${device.description_of_issue}</p>` : ''}
+                                                    <div class="d-flex gap-2 flex-wrap">
+                                                        <span class="badge bg-${statusColor}">${statusLabel}</span>
+                                                        ${isUpcoming ? '<span class="badge bg-info">Upcoming</span>' : ''}
+                                                        ${isPast ? '<span class="badge bg-secondary">Past</span>' : ''}
+                                                        ${repair.payment_status === 'paid' ? '<span class="badge bg-success">Paid</span>' : '<span class="badge bg-warning text-dark">Unpaid</span>'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-2">
+                                                <strong><i class="bi bi-calendar-event me-1"></i>Date:</strong><br>
+                                                <span>${repairDate}</span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong><i class="bi bi-clock me-1"></i>Time Slot:</strong><br>
+                                                <span>${repair.time_slot}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 text-md-end">
+                                            ${actionBtn}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                })
+                .catch(error => {
+                    $('#repairs-container').html(`
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Failed to load repairs. ${error.response?.data?.message || error.message}
+                        </div>
+                    `);
+                });
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'pending': return 'warning';
+                case 'confirmed': return 'info';
+                case 'completed': return 'success';
+                case 'cancelled': return 'danger';
+                default: return 'secondary';
+            }
+        }
+
+        function cancelRepair(bookingId) {
+            Swal.fire({
+                title: 'Cancel Repair?',
+                text: 'Are you sure you want to cancel this repair booking?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, cancel it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.put(`${API_URL}/bookings/${bookingId}`, { status: 'cancelled' })
+                        .then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Cancelled',
+                                text: 'Your repair booking has been cancelled.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            loadMyRepairs();
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: error.response?.data?.message || 'Failed to cancel repair booking'
+                            });
+                        });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

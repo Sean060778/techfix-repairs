@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | TechFix Repairs</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --tf-primary: #0d6efd;
+            --tf-dark: #212529;
+            --tf-light: #f8f9fa;
+        }
+        .hero-services {
+            background: radial-gradient(circle at 10% 20%, rgba(13,110,253,0.18), transparent 25%),
+                        radial-gradient(circle at 90% 10%, rgba(13,110,253,0.18), transparent 30%),
+                        linear-gradient(135deg, #0d6efd 0%, #1b263b 40%, #0f172a 100%);
+            color: #fff;
+            padding: 4rem 0;
+        }
+        .hero-services h1 { font-weight: 700; }
+        .badge-soft { background: rgba(13,110,253,0.1); color: #0d6efd; }
+        .service-card {
+            transition: transform .2s ease, box-shadow .2s ease;
+            border: 1px solid #eef2f7;
+        }
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .icon-circle {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            background: rgba(13,110,253,0.12);
+            color: #0d6efd;
+            font-size: 1.3rem;
+        }
+        .cta-strip {
+            background: #0d6efd;
+            color: #fff;
+            border-radius: 16px;
+        }
+                .navbar-brand i {
+            color: var(--tf-primary); /* Highlight icon in navbar */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="bi bi-gear-wide-connected me-2"></i> TechFix Repairs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="services.html">Services</a></li>
+                    <li class="nav-item d-none" id="nav-my-bookings"><a class="nav-link" href="my-bookings.html">My Bookings</a></li>
+                    <li class="nav-item d-none" id="nav-my-devices"><a class="nav-link" href="my-devices.html">My Devices</a></li>
+                    <li class="nav-item d-none" id="nav-profile"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item" id="auth-login"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item" id="auth-register"><a class="nav-link" href="register.html">Register</a></li>
+                    <li class="nav-item d-none" id="auth-logout"><a class="nav-link" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-services">
+        <div class="container">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-6">
+                    <span class="badge bg-light text-dark mb-3">Laptop & Desktop Repair</span>
+                    <h1 class="display-5 mb-3">Services built for fast, reliable repairs.</h1>
+                    <p class="lead mb-4">From cracked screens to thermal issues and OS cleanups, choose a service and lock your booking in minutes.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="book.html" class="btn btn-light text-dark btn-lg"><i class="bi bi-calendar-plus me-2"></i>Book a Repair</a>
+                        <a href="#catalog" class="btn btn-outline-light btn-lg"><i class="bi bi-grid me-2"></i>View Services</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-5" id="catalog">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="mb-1">Popular Repair Services</h2>
+                    <p class="text-muted mb-0">Pick a service to start your booking.</p>
+                </div>
+<a href="all-services.html" class="btn btn-primary"><i class="bi bi-search me-2"></i>Browse All Services</a>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card service-card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon-circle me-3"><i class="bi bi-tools"></i></div>
+                                <div>
+                                    <h5 class="mb-1">Hardware Repair</h5>
+                                    <span class="badge badge-soft">Screens • Keyboards • Batteries</span>
+                                </div>
+                            </div>
+                            <p class="text-muted">Cracked screens, dead batteries, keyboard and trackpad issues, RAM/SSD upgrades.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-semibold">Starts ₱500</span>
+                                <a href="book.html" class="btn btn-outline-primary btn-sm">Book</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon-circle me-3"><i class="bi bi-thermometer-half"></i></div>
+                                <div>
+                                    <h5 class="mb-1">Thermal & Cleaning</h5>
+                                    <span class="badge badge-soft">Overheating • Fan noise</span>
+                                </div>
+                            </div>
+                            <p class="text-muted">Deep clean, fresh thermal paste, airflow checks, and fan replacements for cooler performance.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-semibold">Starts ₱700</span>
+                                <a href="book.html" class="btn btn-outline-primary btn-sm">Book</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon-circle me-3"><i class="bi bi-shield-lock"></i></div>
+                                <div>
+                                    <h5 class="mb-1">OS & Optimization</h5>
+                                    <span class="badge badge-soft">Windows • macOS • Linux</span>
+                                </div>
+                            </div>
+                            <p class="text-muted">OS repair/reinstall, malware cleanup, driver fixes, tune-ups, and data backup guidance.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-semibold">Starts ₱600</span>
+                                <a href="book.html" class="btn btn-outline-primary btn-sm">Book</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-6">
+                    <h3 class="mb-3">Why choose TechFix?</h3>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Certified technicians for laptops, desktops, and tablets.</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Transparent estimates and status updates.</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Secure handling of your data and hardware.</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-primary me-2"></i>Fast booking with clear time slots.</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="cta-strip p-4 p-lg-5 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
+                        <div>
+                            <h4 class="mb-2 text-white">Need something specific?</h4>
+                            <p class="mb-0 text-white-50">Tell us your device model and issue—we’ll match you with the right service.</p>
+                        </div>
+                        <a href="book.html" class="btn btn-light mt-3 mt-md-0">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 TechFix Repairs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Update auth UI (no redirect - users can view services without logging in)
+        $(document).ready(function() {
+            checkAuth();
+        });
+    </script>
+</body>
+</html>
+
