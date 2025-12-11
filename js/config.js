@@ -10,8 +10,8 @@ const API_CONFIG = {
     development: 'http://127.0.0.1:8000/api',
     
     // Production (Hostinger) - UPDATED!
-    // The domain root points to public_html/techfix/, so API is likely at /api/
-    production: 'https://techfix.ccs4thyear.com/api',
+    // Path structure: /backend/public/api/
+    production: 'https://techfix.ccs4thyear.com/backend/public/api',
     
     // Get current API URL based on environment
     getCurrent: function() {
