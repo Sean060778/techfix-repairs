@@ -187,6 +187,9 @@ $(document).ready(function() {
 
         axios.post(`${API_URL}/verify-reset-otp`, { email, otp_code: otp })
             .then(response => {
+                // Copy email and OTP to second form before switching
+                $('#reset-email-2').val(email);
+                $('#otp_code-2').val(otp);
                 $('#reset-alert').removeClass('alert-info alert-danger').addClass('alert-success').text(response.data.message).removeClass('d-none');
                 $('#verify-otp-form').addClass('d-none');
                 $('#reset-password-form').removeClass('d-none');
@@ -210,8 +213,8 @@ $(document).ready(function() {
         }
 
         const data = {
-            email: $('#reset-email').val(),
-            otp_code: $('#otp_code').val(),
+            email: $('#reset-email-2').val() || $('#reset-email').val(),
+            otp_code: $('#otp_code-2').val() || $('#otp_code').val(),
             new_password: newPassword,
             new_password_confirmation: confirmPassword
         };
