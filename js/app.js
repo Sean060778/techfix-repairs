@@ -181,15 +181,31 @@ $(document).ready(function() {
     // Reset Password - Step 1: Verify OTP
     $('#verify-otp-form').on('submit', function(e) {
         e.preventDefault();
-        const email = $('#reset-email').val();
-        const otp = $('#otp_code').val();
+        // Get email from field or global variable
+        let email = $('#reset-email').val() || (window.resetEmail ? window.resetEmail : null);
+        let otp = $('#otp_code').val() || (window.resetToken ? window.resetToken : null);
+        
+        if (!email) {
+            $('#reset-alert').removeClass('alert-info alert-success').addClass('alert-danger').text('Email is required.').removeClass('d-none');
+            return;
+        }
+        
+        if (!otp) {
+            $('#reset-alert').removeClass('alert-info alert-success').addClass('alert-danger').text('OTP code is required.').removeClass('d-none');
+            return;
+        }
+        
         $('#reset-alert').addClass('d-none');
 
         axios.post(`${API_URL}/verify-reset-otp`, { email, otp_code: otp })
             .then(response => {
-                // Copy email and OTP to second form before switching
+                // Ensure email and OTP are stored in both forms and globally
+                $('#reset-email').val(email);
                 $('#reset-email-2').val(email);
                 $('#otp_code-2').val(otp);
+                window.resetEmail = email;
+                window.resetToken = otp;
+                
                 $('#reset-alert').removeClass('alert-info alert-danger').addClass('alert-success').text(response.data.message).removeClass('d-none');
                 $('#verify-otp-form').addClass('d-none');
                 $('#reset-password-form').removeClass('d-none');
@@ -212,9 +228,23 @@ $(document).ready(function() {
             return;
         }
 
+        // Get email and OTP from multiple sources with fallback
+        let email = $('#reset-email-2').val() || $('#reset-email').val() || (window.resetEmail ? window.resetEmail : null);
+        let otp = $('#otp_code-2').val() || $('#otp_code').val() || (window.resetToken ? window.resetToken : null);
+        
+        if (!email) {
+            $('#reset-alert').removeClass('alert-info alert-success').addClass('alert-danger').text('Email is required. Please refresh the page and try again.').removeClass('d-none');
+            return;
+        }
+        
+        if (!otp) {
+            $('#reset-alert').removeClass('alert-info alert-success').addClass('alert-danger').text('OTP code is required. Please verify the code again.').removeClass('d-none');
+            return;
+        }
+        
         const data = {
-            email: $('#reset-email-2').val() || $('#reset-email').val(),
-            otp_code: $('#otp_code-2').val() || $('#otp_code').val(),
+            email: email,
+            otp_code: otp,
             new_password: newPassword,
             new_password_confirmation: confirmPassword
         };
