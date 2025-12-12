@@ -47,11 +47,18 @@
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
     <script>
-        // Pre-fill username if available in URL or localStorage
+        // Pre-fill username and OTP if available in URL
         const urlParams = new URLSearchParams(window.location.search);
         const username = urlParams.get('username');
+        const otp = urlParams.get('otp');
+        
         if(username) {
             $('#verify-username').val(username);
+        }
+        
+        // Auto-fill OTP code from URL if present
+        if(otp) {
+            $('#otp_code').val(otp);
         }
     </script>
 </body>
