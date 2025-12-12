@@ -51,13 +51,12 @@
         const urlParams = new URLSearchParams(window.location.search);
         const username = urlParams.get('username');
         const otp = urlParams.get('otp');
-        
-        if(username) {
+
+        if (username) {
             $('#verify-username').val(username);
         }
-        
-        // Auto-fill OTP code from URL if present
-        if(otp) {
+
+        if (otp) {
             $('#otp_code').val(otp);
         }
     </script>
