@@ -197,6 +197,8 @@ $(document).ready(function() {
         
         $('#reset-alert').addClass('d-none');
 
+        console.log('Verifying OTP with email:', email, 'otp:', otp); // Debug log
+        
         axios.post(`${API_URL}/verify-reset-otp`, { email, otp_code: otp })
             .then(response => {
                 // Ensure email and OTP are stored in both forms and globally
@@ -205,6 +207,8 @@ $(document).ready(function() {
                 $('#otp_code-2').val(otp);
                 window.resetEmail = email;
                 window.resetToken = otp;
+                
+                console.log('OTP verified, email stored:', email); // Debug log
                 
                 $('#reset-alert').removeClass('alert-info alert-danger').addClass('alert-success').text(response.data.message).removeClass('d-none');
                 $('#verify-otp-form').addClass('d-none');
@@ -232,22 +236,29 @@ $(document).ready(function() {
         let email = $('#reset-email-2').val() || $('#reset-email').val() || (window.resetEmail ? window.resetEmail : null);
         let otp = $('#otp_code-2').val() || $('#otp_code').val() || (window.resetToken ? window.resetToken : null);
         
-        if (!email) {
+        console.log('Reset password - Email:', email, 'OTP:', otp); // Debug log
+        console.log('Email field 1 value:', $('#reset-email').val());
+        console.log('Email field 2 value:', $('#reset-email-2').val());
+        console.log('Window resetEmail:', window.resetEmail);
+        
+        if (!email || email.trim() === '') {
             $('#reset-alert').removeClass('alert-info alert-success').addClass('alert-danger').text('Email is required. Please refresh the page and try again.').removeClass('d-none');
             return;
         }
         
-        if (!otp) {
+        if (!otp || otp.trim() === '') {
             $('#reset-alert').removeClass('alert-info alert-success').addClass('alert-danger').text('OTP code is required. Please verify the code again.').removeClass('d-none');
             return;
         }
         
         const data = {
-            email: email,
-            otp_code: otp,
+            email: email.trim(),
+            otp_code: otp.trim(),
             new_password: newPassword,
             new_password_confirmation: confirmPassword
         };
+        
+        console.log('Sending reset password request with data:', data); // Debug log
         
         $('#reset-alert').addClass('d-none');
 
