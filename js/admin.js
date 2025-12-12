@@ -450,6 +450,10 @@ function loadAdminUsers(params = {}) {
                 return;
             }
 
+            // Get logged-in admin's user_id
+            const loggedInUser = JSON.parse(localStorage.getItem('user') || '{}');
+            const loggedInUserId = loggedInUser.user_id || loggedInUser.id;
+
             // Sort: Admin > Staff > Customer
             const roleOrder = { 'admin': 1, 'staff': 2, 'customer': 3 };
             users.sort((a, b) => {
@@ -458,7 +462,8 @@ function loadAdminUsers(params = {}) {
 
             users.forEach(user => {
                 let deleteBtn = '';
-                if (user.user_id != 6) {
+                // Don't show delete button for the logged-in admin
+                if (user.user_id != loggedInUserId) {
                     deleteBtn = `<button class="btn btn-sm btn-danger" onclick="deleteUser(${user.user_id})">Delete</button>`;
                 }
 
