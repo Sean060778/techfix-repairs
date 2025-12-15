@@ -30,13 +30,13 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Manage Devices</h2>
-            <button class="btn btn-primary" onclick="openAddCarModal()">Add New Device</button>
+            <button class="btn btn-primary" onclick="openAddDeviceModal()">Add New Device</button>
         </div>
 
         <!-- Search and Filter -->
         <div class="card mb-4">
             <div class="card-body">
-                <form id="admin-car-search-form" class="row g-3">
+                <form id="admin-device-search-form" class="row g-3">
                     <div class="col-md-3">
                         <input type="text" class="form-control" id="admin-search-input" placeholder="Search brand, model, issue...">
                     </div>
@@ -73,7 +73,7 @@
         
         <!-- Desktop Table View -->
         <div class="table-responsive d-none d-md-block" style="max-height: 600px; overflow-y: auto;">
-            <table class="table table-striped" id="admin-cars-table">
+            <table class="table table-striped" id="admin-devices-table">
                 <thead class="table-dark sticky-top">
                     <tr>
                         <th>ID</th>
@@ -85,7 +85,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr id="cars-loading">
+                    <tr id="devices-loading">
                         <td colspan="6" class="text-center">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -97,7 +97,7 @@
         </div>
 
         <!-- Mobile Card View -->
-        <div id="admin-cars-cards" class="d-md-none">
+        <div id="admin-devices-cards" class="d-md-none">
             <div class="text-center">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -106,8 +106,8 @@
         </div>
     </div>
 
-    <!-- Car Modal -->
-    <div class="modal fade" id="carModal" tabindex="-1">
+    <!-- Device Modal -->
+    <div class="modal fade" id="deviceModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -115,8 +115,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="add-car-form">
-                        <input type="hidden" id="car_id">
+                    <form id="add-device-form">
+                        <input type="hidden" id="device_id">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Brand</label>
@@ -177,6 +177,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/config.js"></script>
     <script src="../js/admin.js"></script>
+    <script>
+        // Backward compatibility to avoid missing handler errors in caches
+        window.openAddCarModal = window.openAddCarModal || window.openAddDeviceModal;
+    </script>
 </body>
 </html>
-
