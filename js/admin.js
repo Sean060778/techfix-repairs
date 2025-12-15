@@ -695,15 +695,11 @@ function loadAdminHistory(params = {}) {
                 let dateTimeStr = 'N/A';
                 if (booking.date) {
                     const date = new Date(booking.date);
-                    const formattedDate = date.toLocaleDateString('en-US', { 
+                    dateTimeStr = date.toLocaleDateString('en-US', { 
                         year: 'numeric', 
                         month: '2-digit', 
                         day: '2-digit' 
                     });
-                    dateTimeStr = formattedDate;
-                    if (booking.time_slot) {
-                        dateTimeStr += ` (${booking.time_slot})`;
-                    }
                 }
 
             const formattedService = formatServiceType(booking.service_type);
