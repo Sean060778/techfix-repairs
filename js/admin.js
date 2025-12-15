@@ -628,6 +628,9 @@ function openAddDeviceModal() {
     $('#modalTitle').text('Add New Device');
     $('#deviceModal').modal('show');
 }
+// Backward compatibility for any old inline handlers
+window.openAddDeviceModal = openAddDeviceModal;
+window.openAddCarModal = openAddDeviceModal;
 
 function loadAdminHistory(params = {}) {
     const tbody = $('#admin-history-table tbody');
