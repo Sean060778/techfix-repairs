@@ -11,7 +11,7 @@ const API_CONFIG = {
     
     // Production (Hostinger) - UPDATED!
     // Path structure: /backend/public/api/
-    production: 'https://techfix.ccs4thyear.com/backend/api',
+    production: 'https://techfix.ccs4thyear.com/backend/public/api',
     
     // Get current API URL based on environment
     getCurrent: function() {
@@ -52,4 +52,5 @@ if (API_CONFIG.getCurrent() === API_CONFIG.development) {
     console.log('🚀 Production Mode - API URL:', API_URL);
     console.log('   (Hostinger backend)');
 }
+
 
