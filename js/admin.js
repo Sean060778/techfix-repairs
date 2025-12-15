@@ -270,11 +270,17 @@ function loadDashboardStats() {
     // Getting counts manually since we don't have a stats endpoint
     axios.get(`${API_URL}/devices?all=true`)
         .then(res => $('#total-devices').text(res.data.length))
-        .catch(() => $('#total-devices').text('Error'));
+        .catch(err => {
+            console.error('Devices count error:', err.response?.status, err.response?.data);
+            $('#total-devices').text('Error');
+        });
     
     axios.get(`${API_URL}/admin/users`)
         .then(res => $('#total-users').text(res.data.length))
-        .catch(() => $('#total-users').text('Error'));
+        .catch(err => {
+            console.error('Users count error:', err.response?.status, err.response?.data);
+            $('#total-users').text('Error');
+        });
         
     axios.get(`${API_URL}/bookings`) 
         .then(res => {
@@ -283,7 +289,10 @@ function loadDashboardStats() {
             ).length;
             $('#total-bookings').text(activeBookings);
         })
-        .catch(() => $('#total-bookings').text('Error')); 
+        .catch(err => {
+            console.error('Bookings count error:', err.response?.status, err.response?.data);
+            $('#total-bookings').text('Error');
+        }); 
 }
 
 const DEFAULT_DEVICE_IMAGE = '../images/default-device.svg';
