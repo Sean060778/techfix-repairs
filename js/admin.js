@@ -790,7 +790,10 @@ function formatServiceType(service) {
 function formatTimeSlot(slot) {
     if (!slot) return 'N/A';
     const raw = slot.toString().trim();
-    const match = raw.match(/^(\d{1,2}):(\d{2})/);
+
+    // Normalize common inputs: "14:00", "14:00 PM", "2:00 pm"
+    const timeOnly = raw.split(/\s+/)[0]; // take first token
+    const match = timeOnly.match(/^(\d{1,2}):(\d{2})$/);
     if (match) {
         let hours = parseInt(match[1], 10);
         const minutes = match[2];
@@ -799,6 +802,8 @@ function formatTimeSlot(slot) {
         if (hours === 0) hours = 12;
         return `${hours}:${minutes} ${suffix}`;
     }
+
+    // Fallback: uppercase the original
     return raw.toUpperCase();
 }
 
