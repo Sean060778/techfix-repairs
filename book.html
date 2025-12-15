@@ -409,6 +409,21 @@
             $(`#step-${currentStep}-indicator`).removeClass('completed').addClass('active');
         };
 
+        function formatTimeSlotValue(val) {
+            if (!val) return '';
+            const raw = val.toString().trim();
+            const match = raw.match(/^(\d{1,2}):(\d{2})/);
+            if (match) {
+                let hours = parseInt(match[1], 10);
+                const minutes = match[2];
+                const suffix = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                if (hours === 0) hours = 12;
+                return `${hours}:${minutes} ${suffix}`;
+            }
+            return raw.toUpperCase();
+        }
+
         window.updateReview = function() {
             $('#review-make').text($('#device-make').val());
             $('#review-model').text($('#device-model').val());
@@ -426,8 +441,10 @@
             const date = new Date($('#dropoff-date').val());
             $('#review-date').text(date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
             
-            const timeSlot = $('#time-slot option:selected').text();
-            $('#review-time').text(timeSlot);
+            const timeSlotVal = $('#time-slot').val();
+            const timeSlotFormatted = formatTimeSlotValue(timeSlotVal);
+            const timeSlotText = $('#time-slot option:selected').text();
+            $('#review-time').text(timeSlotFormatted || timeSlotText || 'Not selected');
             
             // Update staff review
             const staffSelect = $('#staff-select');
