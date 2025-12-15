@@ -41,25 +41,25 @@ $(document).ready(function() {
     });
 
     // Dashboard Stats
-    if ($('#total-devices').length) {
+    if ($('#total-cars').length) {
         loadDashboardStats();
     }
 
     // Devices Management
-    if ($('#admin-devices-table').length) {
-        loadAdminDevices();
+    if ($('#admin-cars-table').length) {
+        loadAdminCars();
 
-        $('#admin-device-search-form').on('submit', function(e) {
+        $('#admin-car-search-form').on('submit', function(e) {
             e.preventDefault();
             const search = $('#admin-search-input').val();
             const status = $('#admin-status-filter').val();
             const device_type = $('#admin-transmission-filter').val();
             const operating_system = $('#admin-fuel-filter').val();
             
-            loadAdminDevices({ search, status, device_type, operating_system });
+            loadAdminCars({ search, status, device_type, operating_system });
         });
 
-        $('#add-device-form').on('submit', function(e) {
+        $('#add-car-form').on('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData();
@@ -76,19 +76,19 @@ $(document).ready(function() {
                 formData.append('image', imageFile);
             }
 
-            const deviceId = $('#device_id').val();
+            const carId = $('#car_id').val();
             
-            if (deviceId) {
+            if (carId) {
                 // Update
                 // Laravel method spoofing for PUT with FormData
                 formData.append('_method', 'PUT');
                 
-                axios.post(`${API_URL}/admin/devices/${deviceId}`, formData, {
+                axios.post(`${API_URL}/admin/devices/${carId}`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
                     .then(() => {
-                        $('#deviceModal').modal('hide');
-                        loadAdminDevices();
+                        $('#carModal').modal('hide');
+                        loadAdminCars();
                         const Toast = Swal.mixin({
                             toast: true,
                             position: "top-end",
@@ -118,8 +118,8 @@ $(document).ready(function() {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
                     .then(() => {
-                        $('#deviceModal').modal('hide');
-                        loadAdminDevices();
+                        $('#carModal').modal('hide');
+                        loadAdminCars();
                         const Toast = Swal.mixin({
                             toast: true,
                             position: "top-end",
@@ -269,8 +269,8 @@ function checkAdmin() {
 function loadDashboardStats() {
     // Getting counts manually since we don't have a stats endpoint
     axios.get(`${API_URL}/devices?all=true`)
-        .then(res => $('#total-devices').text(res.data.length))
-        .catch(() => $('#total-devices').text('Error'));
+        .then(res => $('#total-cars').text(res.data.length))
+        .catch(() => $('#total-cars').text('Error'));
     
     axios.get(`${API_URL}/admin/users`)
         .then(res => $('#total-users').text(res.data.length))
@@ -281,16 +281,16 @@ function loadDashboardStats() {
             const activeBookings = res.data.filter(b => 
                 ['pending', 'confirmed'].includes(b.status)
             ).length;
-            $('#total-bookings').text(activeBookings);
+            $('#total-rentals').text(activeBookings);
         })
-        .catch(() => $('#total-bookings').text('Error')); 
+        .catch(() => $('#total-rentals').text('Error')); 
 }
 
 const DEFAULT_DEVICE_IMAGE = '../images/default-device.svg';
 
-function loadAdminDevices(params = {}) {
-    const tbody = $('#admin-devices-table tbody');
-    const cardsContainer = $('#admin-devices-cards');
+function loadAdminCars(params = {}) {
+    const tbody = $('#admin-cars-table tbody');
+    const cardsContainer = $('#admin-cars-cards');
     // If we are re-searching, show spinner again
     if (params.search || params.status || params.device_type || params.operating_system) {
         tbody.html(`
@@ -335,8 +335,8 @@ function loadAdminDevices(params = {}) {
 
     axios.get(finalUrl)
         .then(response => {
-            const tbody = $('#admin-devices-table tbody');
-            const cardsContainer = $('#admin-devices-cards');
+            const tbody = $('#admin-cars-table tbody');
+            const cardsContainer = $('#admin-cars-cards');
             tbody.empty();
             cardsContainer.empty();
             
@@ -365,8 +365,8 @@ function loadAdminDevices(params = {}) {
                         <td>${device.status ? device.status.replace(/_/g, ' ') : 'N/A'}</td>
                         <td>${device.device_type || 'N/A'}</td>
                         <td>
-                            <button class="btn btn-sm btn-info" onclick="editDevice(${device.device_id})">Edit</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteDevice(${device.device_id})">Delete</button>
+                            <button class="btn btn-sm btn-info" onclick="editCar(${device.device_id})">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCar(${device.device_id})">Delete</button>
                         </td>
                     </tr>
                 `);
@@ -393,8 +393,8 @@ function loadAdminDevices(params = {}) {
                                 <strong>Status:</strong> <span class="badge bg-secondary">${device.status ? device.status.replace(/_/g, ' ') : 'N/A'}</span>
                             </div>
                             <div class="d-grid gap-2 d-md-flex">
-                                <button class="btn btn-sm btn-info flex-fill" onclick="editDevice(${device.device_id})">Edit</button>
-                                <button class="btn btn-sm btn-danger flex-fill" onclick="deleteDevice(${device.device_id})">Delete</button>
+                                <button class="btn btn-sm btn-info flex-fill" onclick="editCar(${device.device_id})">Edit</button>
+                                <button class="btn btn-sm btn-danger flex-fill" onclick="deleteCar(${device.device_id})">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -512,10 +512,10 @@ function loadAdminUsers(params = {}) {
 }
 
 // Global functions for onclick
-window.editDevice = function(id) {
+window.editCar = function(id) {
     axios.get(`${API_URL}/devices/${id}`).then(res => {
         const device = res.data;
-        $('#device_id').val(device.device_id);
+        $('#car_id').val(device.device_id);
         $('#make').val(device.make);
         $('#model').val(device.model);
         $('#serial_number').val(device.serial_number);
@@ -531,11 +531,11 @@ window.editDevice = function(id) {
         }
         
         $('#modalTitle').text('Edit Device');
-        $('#deviceModal').modal('show');
+        $('#carModal').modal('show');
     });
 };
 
-window.deleteDevice = function(id) {
+window.deleteCar = function(id) {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -548,7 +548,7 @@ window.deleteDevice = function(id) {
         if (result.isConfirmed) {
             axios.delete(`${API_URL}/admin/devices/${id}`)
                 .then(() => {
-                    loadAdminDevices();
+                    loadAdminCars();
                     Swal.fire(
                         'Deleted!',
                         'The device has been deleted.',
@@ -621,16 +621,13 @@ window.deleteUser = function(id) {
 };
 
 // Clear modal when opening for add
-function openAddDeviceModal() {
-    $('#device_id').val('');
-    $('#add-device-form')[0].reset();
+function openAddCarModal() {
+    $('#car_id').val('');
+    $('#add-car-form')[0].reset();
     $('#current-image-preview').empty();
     $('#modalTitle').text('Add New Device');
-    $('#deviceModal').modal('show');
+    $('#carModal').modal('show');
 }
-// Backward compatibility for any old inline handlers
-window.openAddDeviceModal = openAddDeviceModal;
-window.openAddCarModal = openAddDeviceModal;
 
 function loadAdminHistory(params = {}) {
     const tbody = $('#admin-history-table tbody');
@@ -698,76 +695,77 @@ function loadAdminHistory(params = {}) {
                 let dateTimeStr = 'N/A';
                 if (booking.date) {
                     const date = new Date(booking.date);
-                    dateTimeStr = date.toLocaleDateString('en-US', { 
+                    const formattedDate = date.toLocaleDateString('en-US', { 
                         year: 'numeric', 
                         month: '2-digit', 
                         day: '2-digit' 
                     });
+                    dateTimeStr = formattedDate;
+                    if (booking.time_slot) {
+                        dateTimeStr += ` (${booking.time_slot})`;
+                    }
                 }
 
-            const formattedService = formatServiceType(booking.service_type);
-            const formattedTimeSlot = formatTimeSlot(booking.time_slot);
-
-            // Desktop Table Row
-            tbody.append(`
-                <tr>
-                    <td>${booking.booking_id || booking.id}</td>
-                    <td>${user.username || user.full_name || 'N/A'}</td>
-                    <td>${device.make && device.model ? `${device.make} ${device.model}` : 'Deleted Device'}</td>
-                    <td>${dateTimeStr} ${formattedTimeSlot !== 'N/A' ? `(${formattedTimeSlot})` : ''}</td>
-                    <td>${formattedService}</td>
-                    <td><span class="badge ${paymentClass}">${booking.payment_status || 'unpaid'}</span></td>
-                    <td><span class="badge ${statusClass}">${booking.status}</span></td>
-                    <td>${staff.full_name || staff.username || 'Not assigned'}</td>
-                    <td>
-                        <button class="btn btn-sm btn-info" onclick="viewBookingDetails(${booking.booking_id || booking.id})" title="View Details">
-                            <i class="bi bi-eye"></i> View
-                        </button>
-                        ${booking.status !== 'cancelled' && booking.status !== 'completed' ? 
-                            `<button class="btn btn-sm btn-warning" onclick="cancelBooking(${booking.booking_id || booking.id})">Cancel</button>` : 
-                            ''
-                        }
-                    </td>
-                </tr>
-            `);
-
-            // Mobile Card View
-            cardsContainer.append(`
-                <div class="card mb-3 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Booking #${booking.booking_id || booking.id}</h5>
-                        <hr>
-                        <div class="mb-2">
-                            <strong>Customer:</strong> ${user.username || user.full_name || 'N/A'}
-                        </div>
-                        <div class="mb-2">
-                            <strong>Device:</strong> ${device.make && device.model ? `${device.make} ${device.model}` : 'Deleted Device'}
-                        </div>
-                        <div class="mb-2">
-                            <strong>Date & Time:</strong> ${dateTimeStr} ${formattedTimeSlot !== 'N/A' ? `(${formattedTimeSlot})` : ''}
-                        </div>
-                        <div class="mb-2">
-                            <strong>Service Type:</strong> ${formattedService}
-                        </div>
-                        <div class="mb-2">
-                            <strong>Payment Status:</strong> <span class="badge ${paymentClass}">${booking.payment_status || 'unpaid'}</span>
-                        </div>
-                        <div class="mb-2">
-                            <strong>Status:</strong> <span class="badge ${statusClass}">${booking.status}</span>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Assigned Staff:</strong> ${staff.full_name || staff.username || 'Not assigned'}
-                        </div>
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-sm btn-info" onclick="viewBookingDetails(${booking.booking_id || booking.id})">View Details</button>
+                // Desktop Table Row
+                tbody.append(`
+                    <tr>
+                        <td>${booking.booking_id || booking.id}</td>
+                        <td>${user.username || user.full_name || 'N/A'}</td>
+                        <td>${device.make && device.model ? `${device.make} ${device.model}` : 'Deleted Device'}</td>
+                        <td>${dateTimeStr}</td>
+                        <td>${booking.service_type || 'N/A'}</td>
+                        <td><span class="badge ${paymentClass}">${booking.payment_status || 'unpaid'}</span></td>
+                        <td><span class="badge ${statusClass}">${booking.status}</span></td>
+                        <td>${staff.full_name || staff.username || 'Not assigned'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" onclick="viewBookingDetails(${booking.booking_id || booking.id})" title="View Details">
+                                <i class="bi bi-eye"></i> View
+                            </button>
                             ${booking.status !== 'cancelled' && booking.status !== 'completed' ? 
                                 `<button class="btn btn-sm btn-warning" onclick="cancelBooking(${booking.booking_id || booking.id})">Cancel</button>` : 
                                 ''
                             }
+                        </td>
+                    </tr>
+                `);
+
+                // Mobile Card View
+                cardsContainer.append(`
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Booking #${booking.booking_id || booking.id}</h5>
+                            <hr>
+                            <div class="mb-2">
+                                <strong>Customer:</strong> ${user.username || user.full_name || 'N/A'}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Device:</strong> ${device.make && device.model ? `${device.make} ${device.model}` : 'Deleted Device'}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Date & Time:</strong> ${dateTimeStr}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Service Type:</strong> ${booking.service_type || 'N/A'}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Payment Status:</strong> <span class="badge ${paymentClass}">${booking.payment_status || 'unpaid'}</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Status:</strong> <span class="badge ${statusClass}">${booking.status}</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Assigned Staff:</strong> ${staff.full_name || staff.username || 'Not assigned'}
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-sm btn-info" onclick="viewBookingDetails(${booking.booking_id || booking.id})">View Details</button>
+                                ${booking.status !== 'cancelled' && booking.status !== 'completed' ? 
+                                    `<button class="btn btn-sm btn-warning" onclick="cancelBooking(${booking.booking_id || booking.id})">Cancel</button>` : 
+                                    ''
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
-            `);
+                `);
             });
         })
         .catch(err => {
@@ -775,21 +773,6 @@ function loadAdminHistory(params = {}) {
             $('#admin-history-table tbody').html('<tr><td colspan="9" class="text-center text-danger">Failed to load history.</td></tr>');
             $('#admin-history-cards').html('<div class="text-center p-4 text-danger"><p>Failed to load history.</p></div>');
         });
-}
-
-// Format helpers
-function formatServiceType(service) {
-    if (!service) return 'N/A';
-    return service
-        .toString()
-        .split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-}
-
-function formatTimeSlot(slot) {
-    if (!slot) return 'N/A';
-    return slot.toString().toUpperCase();
 }
 
 window.viewBookingDetails = function(id) {
